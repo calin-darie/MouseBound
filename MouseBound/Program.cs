@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using PInvoke;
+using MouseBound.Tray;
+using System.Collections.Generic;
 
 namespace MouseBound
 { 
@@ -18,9 +20,16 @@ namespace MouseBound
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_MOVESIZESTART);
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_MOVESIZEEND);
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_FOREGROUND);
+            TrayIcon.Install(new Dictionary<string, Action> { { "Quit", Quit} });
 
             Application.Run();
             //todo UnhookWindowsHookEx(hookId);
+        }
+        
+        private static void Quit()
+        {
+            TrayIcon.Uninstall();
+            Application.Exit();
         }
 
         private static void ClipCursorOnWindowsEvent(User32.WindowsEventHookType winEvent)
@@ -99,6 +108,4 @@ namespace MouseBound
             Cursor.Clip = screen.Bounds;
         } 
     }
-
-
 }
