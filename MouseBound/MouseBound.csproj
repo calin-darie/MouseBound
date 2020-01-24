@@ -64,6 +64,7 @@
     <Compile Include="MouseBounds.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleInstanceOfThisApp.cs" />
     <Compile Include="Tray\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
