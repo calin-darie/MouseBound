@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Threading;
 
 namespace MouseBound
@@ -14,7 +15,7 @@ namespace MouseBound
             if (!_mutex.WaitOne(0, false))
             {
                 MessageBox.Show(nameof(MouseBound) + " is already running. Check the system tray, or Task Manager.");
-                return;
+                throw new Exception("instance already running");
             }
         }
 
