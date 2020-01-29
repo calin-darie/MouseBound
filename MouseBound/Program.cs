@@ -2,6 +2,7 @@
 using MouseBound.Tray;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace MouseBound
 {
@@ -18,7 +19,7 @@ namespace MouseBound
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                File.AppendAllText("log.txt", DateTime.UtcNow + " " + e);
             }
             finally
             {
