@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using PInvoke;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MouseBound
 {
@@ -29,7 +30,7 @@ namespace MouseBound
         {
             var hook = User32.SetWinEventHook(
                         winEvent,
-                        User32.WindowsEventHookType.EVENT_SYSTEM_MOVESIZEEND,
+                        winEvent,
                         IntPtr.Zero,
                         Marshal.GetFunctionPointerForDelegate((WinEventDelegate)WinEventProc),
                         0,
@@ -44,6 +45,8 @@ namespace MouseBound
         private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             ClipCursorToCurrentScreen();
+            Task.Delay(50)
+                .ContinueWith(_ => ClipCursorToCurrentScreen());
         }
 
         private static User32.SafeHookHandle SetHook(User32.WindowsHookDelegate proc)
@@ -58,18 +61,6 @@ namespace MouseBound
                     0);
                 _hooks.Add(hook);
                 return hook;
-            }
-        }
-        private static User32.SafeHookHandle SetMouseHook(User32.WindowsHookDelegate proc)
-        {
-            using (Process curProcess = Process.GetCurrentProcess())
-            using (ProcessModule curModule = curProcess.MainModule)
-            {
-                return User32.SetWindowsHookEx(
-                    User32.WindowsHookType.WH_MOUSE_LL,
-                    proc,
-                    Kernel32.GetModuleHandle(curModule.ModuleName).DangerousGetHandle(),
-                    0);
             }
         }
 
