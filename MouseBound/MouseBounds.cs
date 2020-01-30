@@ -50,9 +50,14 @@ namespace MouseBound
 
         private static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
+            var position = Cursor.Position;
             ClipCursorToCurrentScreen();
             Task.Delay(50)
-                .ContinueWith(_ => ClipCursorToCurrentScreen());
+                .ContinueWith(_ =>
+                {
+                    Cursor.Position = position;
+                    ClipCursorToCurrentScreen();
+                });
         }
 
         private static User32.SafeHookHandle SetKeyboardHook(User32.WindowsHookDelegate proc)
