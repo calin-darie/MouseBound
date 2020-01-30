@@ -11,10 +11,16 @@ namespace MouseBound
 {
     public class MouseBounds
     {
+        static MouseBounds()
+        {
+            _winEventDelegate = WinEventProc;
+            _keyboardDelegate = KeyboardHookCallback;
+        }
+
         public static void Install()
         {
             ClipCursorToCurrentScreen();
-            _keyboardHook = SetHook(HookCallback);
+            _keyboardHook = SetKeyboardHook(_keyboardDelegate);
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_MOVESIZESTART);
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_MOVESIZEEND);
             ClipCursorOnWindowsEvent(User32.WindowsEventHookType.EVENT_SYSTEM_FOREGROUND);
@@ -32,7 +38,7 @@ namespace MouseBound
                         winEvent,
                         winEvent,
                         IntPtr.Zero,
-                        Marshal.GetFunctionPointerForDelegate((WinEventDelegate)WinEventProc),
+                        Marshal.GetFunctionPointerForDelegate(_winEventDelegate),
                         0,
                         0,
                         User32.WindowsEventHookFlags.WINEVENT_OUTOFCONTEXT
@@ -49,7 +55,7 @@ namespace MouseBound
                 .ContinueWith(_ => ClipCursorToCurrentScreen());
         }
 
-        private static User32.SafeHookHandle SetHook(User32.WindowsHookDelegate proc)
+        private static User32.SafeHookHandle SetKeyboardHook(User32.WindowsHookDelegate proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
@@ -64,7 +70,7 @@ namespace MouseBound
             }
         }
 
-        private static int HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        private static int KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             int vkCode = Marshal.ReadInt32(lParam);
             if ((Keys)vkCode == Keys.LControlKey || (Keys)vkCode == Keys.RControlKey)
@@ -95,5 +101,7 @@ namespace MouseBound
         
         private static User32.SafeHookHandle _keyboardHook;
         private static List<IDisposable> _hooks = new List<IDisposable>();
+        private static WinEventDelegate _winEventDelegate;
+        private static User32.WindowsHookDelegate _keyboardDelegate;
     }
 }
