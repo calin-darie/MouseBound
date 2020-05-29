@@ -96,6 +96,11 @@ namespace MouseBound
         private static void ClipCursorToCurrentScreen()
         {
             var screen = Screen.FromPoint(Cursor.Position);
+            if (Cursor.Clip == screen.Bounds)
+                return;
+
+            MonitorChanger.SetAsPrimaryMonitor(screen.DeviceName);
+            screen = Screen.FromPoint(Cursor.Position);
             Cursor.Clip = screen.Bounds;
         }
 
