@@ -1,14 +1,11 @@
-﻿using System.Windows.Forms;
-using MouseBound.Tray;
-using System.Collections.Generic;
-using System;
-using System.IO;
+﻿using MouseBound.Tray;
 
 namespace MouseBound
 {
-    class Program
-    {   
-        public static void Main()
+    static class Program
+    {
+        [STAThread]
+        static void Main() 
         {
             try
             {

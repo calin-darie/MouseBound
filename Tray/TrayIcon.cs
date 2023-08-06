@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-
-namespace MouseBound.Tray
+﻿namespace MouseBound.Tray
 {
     public class TrayIcon
     {
@@ -13,12 +8,13 @@ namespace MouseBound.Tray
             _notifyIcon = new NotifyIcon
             {
                 Icon = Resources.Icon,
-                ContextMenu = new ContextMenu(
-                    contextMenuActions
-                        .Select(contextMenuAction => new MenuItem( contextMenuAction.Key, (_, __) => contextMenuAction.Value()))
-                        .ToArray()),
+                ContextMenuStrip = new ContextMenuStrip(),
                 Visible = true
             };
+            _notifyIcon.ContextMenuStrip.Items.AddRange(contextMenuActions
+                .Select(contextMenuAction => new ToolStripMenuItem( contextMenuAction.Key, null, (_, __) => contextMenuAction.Value(), contextMenuAction.Key))
+                .ToArray()
+                );
         }
 
         public static void Uninstall()

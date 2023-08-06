@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace MouseBound
 {
@@ -18,7 +17,7 @@ namespace MouseBound
                 deviceName,
                 ref deviceMode,
                 (IntPtr)null,
-                (ChangeDisplaySettingsFlags.CDS_SET_PRIMARY | ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY | ChangeDisplaySettingsFlags.CDS_NORESET),
+                ChangeDisplaySettingsFlags.CDS_SET_PRIMARY | ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY | ChangeDisplaySettingsFlags.CDS_NORESET,
                 IntPtr.Zero);
 
             var device = new DISPLAY_DEVICE();
@@ -41,7 +40,7 @@ namespace MouseBound
                         device.DeviceName,
                         ref otherDeviceMode,
                         (IntPtr)null,
-                        (ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY | ChangeDisplaySettingsFlags.CDS_NORESET),
+                        ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY | ChangeDisplaySettingsFlags.CDS_NORESET,
                         IntPtr.Zero);
 
                 }

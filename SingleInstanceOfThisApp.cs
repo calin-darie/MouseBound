@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace MouseBound
 {
-    class SingleInstanceOfThisApp
+    static class SingleInstanceOfThisApp
     {
         static Mutex _mutex;
         public static void Install()
